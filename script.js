@@ -36,8 +36,8 @@ function appendBook(book) {
 
         if (bookIndex !== -1) {
             myLibrary.splice(bookIndex, 1);
-
             bookCard.parentNode.removeChild(bookCard);
+            i--
         }
     });
 
@@ -63,9 +63,8 @@ submit.addEventListener('click',(event) =>{
     read.checked = false;
     popup.classList.toggle('open-popup-form');
     bookArea.appendChild(appendBook(myLibrary[i]));
-
-   i++
+    i = myLibrary.length - 1;
 })
 addBtn.addEventListener('click', () => {
-    popup.classList.add('open-popup-form');
+    popup.classList.toggle('open-popup-form');
 });
