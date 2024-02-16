@@ -37,7 +37,8 @@ function appendBook(book) {
         if (bookIndex !== -1) {
             myLibrary.splice(bookIndex, 1);
             bookCard.parentNode.removeChild(bookCard);
-            i--
+            console.log('bookIndex :' + bookIndex)
+            return 0;
         }
     });
 
@@ -53,6 +54,7 @@ const addBtn = document.querySelector('#addBtn');
 const bookArea = document.querySelector('.book-area')
 let i = 0;
 submit.addEventListener('click',(event) =>{
+    i = myLibrary.length;
     event.preventDefault()
     titleValue = title.value;
     yearValue = year.value;
@@ -63,8 +65,10 @@ submit.addEventListener('click',(event) =>{
     read.checked = false;
     popup.classList.toggle('open-popup-form');
     bookArea.appendChild(appendBook(myLibrary[i]));
-    i = myLibrary.length - 1;
+    i = myLibrary.length;
+    console.log(i)
 })
+
 addBtn.addEventListener('click', () => {
     popup.classList.toggle('open-popup-form');
 });
