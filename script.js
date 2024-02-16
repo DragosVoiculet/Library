@@ -1,16 +1,28 @@
-const myLibrary = [];
 
-function Book(title, year, read) {
+class Book{
+    constructor(title, year ,read){
     this.title=title;
     this.year=year;
     this.read=read;
+    }
+    
 }
+class Library{
+    constructor(){
+        this.books = [];
+    }
+    addBook(title, year, read) {
+        const book = new Book(title,year,read);
+        this.books.push(book)
+      }
+    removeBook(book){
+        const bookIndex = this.books.indexOf(book);
 
-function addBookToLibrary(title, year, read) {
-  const book = new Book(title,year,read);
-  myLibrary.push(book)
-}
-function appendBook(book) {
+            if (bookIndex !== -1) {
+            this.books.splice(bookIndex, 1);
+        }
+    }
+    renderBook(book){
     const bookCard = document.createElement('div');
     bookCard.classList.add('book-card');
 
@@ -23,52 +35,48 @@ function appendBook(book) {
     const readElement = document.createElement('p');
     readElement.textContent = `Read: ${book.read ? 'yes' : 'no'}`;
 
-    const removeBook = document.createElement('button');
-    removeBook.textContent = 'Remove';
+    const removeBookBtn = document.createElement('button');
+    removeBookBtn.textContent = 'Remove'
 
+    removeBookBtn.addEventListener('click', ()=>{
+        this.removeBook(book)
+        bookCard.parentNode.removeChild(bookCard);
+    });
     bookCard.appendChild(titleElement);
     bookCard.appendChild(yearElement);
     bookCard.appendChild(readElement);
-    bookCard.appendChild(removeBook);
-
-    removeBook.addEventListener('click', () => {
-        const bookIndex = myLibrary.indexOf(book);
-
-        if (bookIndex !== -1) {
-            myLibrary.splice(bookIndex, 1);
-            bookCard.parentNode.removeChild(bookCard);
-            console.log('bookIndex :' + bookIndex)
-            return 0;
-        }
-    });
+    bookCard.appendChild(removeBookBtn);
 
     return bookCard;
+    }
 }
 
-const title = document.querySelector('#title');
-const year = document.querySelector('#year');
-const read = document.querySelector('#read');
-const submit = document.querySelector('#submit');
-const popup = document.querySelector('.popup-form');
-const addBtn = document.querySelector('#addBtn');
-const bookArea = document.querySelector('.book-area')
-let i = 0;
-submit.addEventListener('click',(event) =>{
-    i = myLibrary.length;
-    event.preventDefault()
-    titleValue = title.value;
-    yearValue = year.value;
-    readValue = read.checked;
-    addBookToLibrary(titleValue,yearValue,readValue);
-    title.value = '';
-    year.value = '';
-    read.checked = false;
-    popup.classList.toggle('open-popup-form');
-    bookArea.appendChild(appendBook(myLibrary[i]));
-    i = myLibrary.length;
-    console.log(i)
-})
+const library = new Library();
 
-addBtn.addEventListener('click', () => {
-    popup.classList.toggle('open-popup-form');
-});
+const submitBtn = document.querySelector('#submit');
+const titleInput = document.querySelector('#title');
+const yearInput = document.querySelector('#year');
+const readCheckbox = document.querySelector('#read');
+const addBtn = document.querySelector('#addBtn');
+const popupForm = document.querySelector('.popup-form');
+const bookArea = document.querySelector('.book-area')
+submitBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+  
+    const title = titleInput.value;
+    const year = yearInput.value;
+    const read = readCheckbox.checked;
+  
+    library.addBook(title, year, read);
+  
+    titleInput.value = '';
+    yearInput.value = '';
+    readCheckbox.checked = false;
+  
+    popupForm.classList.toggle('open-popup-form');
+    bookArea.appendChild(library.renderBook(library.books[library.books.length - 1]));
+  });
+  
+  addBtn.addEventListener('click', () => {
+    popupForm.classList.toggle('open-popup-form');
+  });
